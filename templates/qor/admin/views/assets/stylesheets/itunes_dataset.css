@@ -1,0 +1,7 @@
+.qor-table__content {
+    max-width: 300px;
+    max-height: 55px!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
