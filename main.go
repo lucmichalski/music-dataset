@@ -40,7 +40,7 @@ var (
 type Application struct {
 	gorm.Model
 	ExportDate        string
-	ApplicationId     string
+	ApplicationId     int `sql:type:bigint`
 	Title             string
 	RecommendedAge    string
 	ArtistName        string
@@ -61,11 +61,11 @@ type Application struct {
 type Collection struct {
 	gorm.Model
 	ExportDate          string
-	CollectionId        int
+	CollectionId        int `sql:type:bigint`
 	Name                string
 	TitleVersion        string
 	SearchTerms         string
-	ParentalAdvisoryId  int
+	ParentalAdvisoryId  int `sql:type:bigint`
 	ArtistDisplayName   string
 	ViewUrl             string
 	ArtworkUrl          string
@@ -75,15 +75,24 @@ type Collection struct {
 	ContentProviderName string
 	Copyright           string
 	PLine               string
-	MediaTypeId         int
+	MediaTypeId         int `sql:type:bigint`
 	IsCompilation       bool
 	CollectionTypeId    string
+}
+
+type CollectionSong struct {
+	ExportDate   string
+	CollectionID int `sql:type:bigint`
+	SongID       int `sql:type:bigint`
+	TrackNumber  int
+	VolumeNumber int
+	PreorderOnly bool
 }
 
 type Song struct {
 	gorm.Model
 	ExportDate            string
-	SongId                int
+	SongId                int `sql:type:bigint`
 	Name                  string
 	TitleVersion          string
 	SearchTerms           string
@@ -98,6 +107,10 @@ type Song struct {
 	PLine                 string
 	PreviewUrl            string
 	PreviewLength         string
+}
+
+type SongCollection struct {
+	gorm.Model
 }
 
 func main() {
@@ -123,7 +136,7 @@ func main() {
 		}
 
 		DB.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
-		DB.AutoMigrate(&Song{}, &Application{}, &Collection{})
+		DB.AutoMigrate(&Song{}, &Application{}, &Collection{}, &CollectionSong{})
 		validations.RegisterCallbacks(DB)
 		DB.LogMode(isVerbose)
 	}
